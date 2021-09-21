@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Informatics : Location</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+
+    <!-- Adding chart -->
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    
+
+
+    <!-- Adding map -->
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script>
+      clat = parseFloat(sessionStorage.getItem("lat"));
+      clon = parseFloat(sessionStorage.getItem("lon"));
+    </script>
+    <script src="result.js"></script>
+    <script src="index.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {
+        packages: ["geochart"],
+        mapsApiKey: "AIzaSyD_dE9FCGgYLs_jOd1t1oTyRKhZFL8dObw",
+      });
+      google.charts.setOnLoadCallback(drawMarkersMap);
+
+      function drawMarkersMap() {
+        var data = google.visualization.arrayToDataTable([
+          ["lat", "lon", "color", "size"],
+          [clat, clon, 2, 6],
+        ]);
+        console.log(clat);
+        console.log(clon);
+
+        var options = {
+          region: "IN",
+          displayMode: "markers",
+          backgroundColor: "#00264d",
+          datalessRegionColor: "#e6f2ff",
+          defaultColor: "#0099ff",
+          sizeAxis: { minSize: 1, maxSize: 4 },
+        };
+
+        var chart = new google.visualization.GeoChart(
+          document.getElementById("chart_div")
+        );
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+
+  <!-- Body loads -->
+  <body onload="func" class="bgimg">
+    <div id="load-wrapper">
+      <div id="loader"></div>
+      <div id="loadtext">Fetching Data</div>
+    </div>
+    <div id="mainbody">
+    <div class="fullbody" style="background-color:white">
+      <hr />
+      <div id="mainheading">
+        <div class="location">
+          <h2>Your Location</h2>
+          <div>
+            <div style="display: inline-block">
+              <img id="locimg" src="./location.jpg" />
+            </div>
+            <div style="display: inline-block" id="location"></div>
+          </div>
+        </div>
+        <div class="dateweather">
+          <div class="daytime" id="daytime"></div>
+          <div class="daytime">
+            <span class="daytime" id="weather"></span>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div id="chart_div"></div>
+      <div id="display">
+        <div id="graphtemp">
+          <img id="image" alt="" />
+          <div id="temp">
+            <span id="temp-data"></span>
+          </div>
+          <div class="cel-faren">
+            <span id="cel" role="button">°C</span>
+            <span class="line"></span>
+            <span id="faren" role="button">°F</span>
+          </div>
+          <div class="cel-faren" id="phw">
+            <div>
+              Humidity:
+              <span id="humidity"></span>
+            </div>
+            <div>
+              Cloudiness:
+              <span id="cloud"></span>
+            </div>
+            <div>
+              Wind:
+              <span id="wind"></span>
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div id="hourday">
+          <div id="buttons">
+            <button
+              id="hourly"
+              style="display: inline-block"
+              type="button"
+              class="btn btn-outline-success"
+              onclick="hourly()"
+            >
+              Hourly
+            </button>
+            <button
+              id="daily"
+              style="display: inline-block"
+              type="button"
+              class="btn btn-outline-warning"
+              onclick="daily()"
+            >
+              Daily
+            </button>
+          </div>
+        </div>
+        <hr />
+        <div id="graphmain">
+          <div style="padding: 19px 0" class="hourval" id="hourlyvalue">
+            <div class="ksb" id="temperature" role="button" onclick="temperature()">Temperature</div>
+              
+            <span class="graphline"></span>
+            <div class="ksb" id="humid" role="button" onclick="humidity()">Humidity</div>
+            <span class="graphline"></span>
+            <div class="ksb" id="windy" role="button" onclick="wind()">Wind</div>
+            <span class="graphline"></span>
+          </div>
+          <!-- <div id="content"> -->
+          <div id="temp_div" style="width: 680px; height: 100px;"></div>
+          <div id="humid_div" style="width: 680px; height: 100px;display: none;"></div>
+          <div id="wind_div" style="width: 680px; height: 100px;display: none;"></div>
+          <!-- </div> -->
+          <div class="dailyvalue" style="display: none;" id="dailyvalue">
+            <div class="value" id="value">
+              <div class="block selected">
+                <div class="day" id="day0"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg0" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max0"><span>°C</span></div>
+                  <div class="min" id="min0"><span>°C</span></div>
+                </div>
+              </div>
+              <div class="block">
+                <div class="day" id="day1"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg1" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max1"><span>°C</span></div>
+                  <div class="min" id="min1"><span>°C</span></div>
+                </div>
+              </div>
+              <div class="block">
+                <div class="day" id="day2"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg2" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max2"><span>°C</span></div>
+                  <div class="min" id="min2"><span>°C</span></div>
+                </div>
+              </div>
+              <div class="block">
+                <div class="day" id="day3"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg3" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max3"><span>°C</span></div>
+                  <div class="min" id="min3"><span>°C</span></div>
+                </div>
+              </div>
+              <div class="block">
+                <div class="day" id="day4"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg4" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max4"><span>°C</span></div>
+                  <div class="min" id="min4"><span>°C</span></div>
+                </div>
+              </div>
+              <div class="block">
+                <div class="day" id="day5"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg5" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max5"><span>°C</span></div>
+                  <div class="min" id="min5"><span>°C</span></div>
+                </div>
+              </div>
+              <div class="block">
+                <div class="day" id="day6"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg6" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max6"><span>°C</span></div>
+                  <div class="min" id="min6"><span>°C</span></div>
+                </div>
+              </div>
+              <div class="block">
+                <div class="day" id="day7"></div>
+                <div class="img">
+                  <img class="dailyimg" id="dailyimg7" />
+                </div>
+                <div class="minmax">
+                  <div class="max" id="max7"><span>°C</span></div>
+                  <div class="min" id="min7"><span>°C</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+    <script>
+      const load = document.getElementById("load-wrapper");
+      const func = setInterval(() => {
+        load.style.display = "none";
+      }, 2000);
+    </script>
+  </body>
+</html>
