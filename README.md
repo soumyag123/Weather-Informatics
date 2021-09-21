@@ -1,2 +1,2 @@
 # Weather-Informatics
- Weather Information website created using HTML , CSS and Javascript
+ Get personalised weather information including hourly data and 7 day forecast.
